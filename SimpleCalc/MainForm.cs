@@ -9,9 +9,9 @@ namespace SimpleCalc
     public partial class MainForm : Form
     {
 
-        private string[] _buttonNames =
+        private readonly string[] _buttonNames =
         {
-            "±", "x²", "⬅", "C", 
+            "±", "x²", "⬅", "C",
             "1/x", "%", "√", "×",
             "1",   "2", "3", "/",
             "4",  "5",  "6", "+",
@@ -47,23 +47,23 @@ namespace SimpleCalc
             {
                 Button tmp = new Button();
 
-                if(nameButton == "," || nameButton == "=" || nameButton == "0")
+                if (nameButton == "," || nameButton == "=" || nameButton == "0")
                     tmp.Size = new Size(109, 50);
                 else
                     tmp.Size = new Size(81, 50);
 
-                if(CheckIsStringNum(nameButton))
+                if (CheckIsStringNum(nameButton))
                     tmp.BackColor = Color.LemonChiffon;
-                else if(nameButton == "C")
+                else if (nameButton == "C")
                     tmp.BackColor = Color.LightCyan;
                 else
                     tmp.BackColor = Color.PeachPuff;
 
                 tmp.Text = nameButton;
-                
+
                 tmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 
-                
+
                 tmp.Location = new Point(posX, posY);
                 posX = posX + tmp.Size.Width + 4;
 
@@ -87,7 +87,7 @@ namespace SimpleCalc
         /// <returns>Если есть цифры то правде, иначе ложь</returns>
         private bool CheckIsStringNum(string s)
         {
-            if(s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || 
+            if (s == "1" || s == "2" || s == "3" || s == "4" || s == "5" ||
                 s == "6" || s == "7" || s == "8" || s == "9" || s == "0")
                 return true;
             else
@@ -164,16 +164,16 @@ namespace SimpleCalc
                     }
                 case ("⬅"):
                     {
-                       if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
-                       {
-                            if(_leftOperand.Length > 1)
+                        if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
+                        {
+                            if (_leftOperand.Length > 1)
                                 _leftOperand = _leftOperand.Remove(_leftOperand.Length - 1);
                             else
                                 _leftOperand = "0";
-                            
+
                             textBoxResult.Text = _leftOperand;
-                       }
-                       else if(_leftOperand != string.Empty && _rigthOperand != string.Empty && _currOperation != string.Empty)
+                        }
+                        else if (_leftOperand != string.Empty && _rigthOperand != string.Empty && _currOperation != string.Empty)
                         {
                             if (_rigthOperand.Length > 1)
                                 _rigthOperand = _rigthOperand.Remove(_rigthOperand.Length - 1);
@@ -223,7 +223,7 @@ namespace SimpleCalc
                         if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
                         {
                             if (_leftOperand[0] != '-')
-                                _leftOperand = _leftOperand.Insert(0,"-");
+                                _leftOperand = _leftOperand.Insert(0, "-");
                             else
                                 _leftOperand = _leftOperand.TrimStart('-');
 
@@ -240,8 +240,24 @@ namespace SimpleCalc
                         }
                         break;
                     }
+                case "x²":
+                    {
+                        DoOperationWithOperand("x²", ref(WhichOperandToDo()));
+                        break;
+                    }
+                case "1/x":
+                    {
+                        DoOperationWithOperand("1/x", ref (WhichOperandToDo()));
+                        break;
+                    }
+                case "√":
+                    {
+                        DoOperationWithOperand("√", ref (WhichOperandToDo()));
+                        break;
+                    }
 
 
+                    
             }
 
         }
@@ -280,7 +296,7 @@ namespace SimpleCalc
         /// <summary>
         /// Выполнить выбраную операцию после нажатия "="
         /// </summary>
-        private void DoOperationAfterEqual() 
+        private void DoOperationAfterEqual()
         {
             double lOper = 0.0;
             double rOper = 0.0;
@@ -355,6 +371,51 @@ namespace SimpleCalc
             }
         }
 
+
+        private void DoOperationWithOperand(string action, ref string operand)
+        {
+            double num;
+
+            switch (action)
+            {
+                case "x²":
+                    {
+                        num = double.Parse(operand);
+                        num *= num;
+                        operand = num.ToString();
+                        textBoxResult.Text = operand;
+                        break;
+                    }
+                case "1/x":
+                    {
+                        num = double.Parse(operand);
+                        num = 1 / num;
+                        operand = num.ToString();
+                        textBoxResult.Text = operand;
+                        break;
+                    }
+                case "√":
+                    {
+                        num = double.Parse(operand);
+                        num = Math.Sqrt(num);
+                        operand = num.ToString();
+                        textBoxResult.Text = operand;
+                        break;
+                    }
+                    
+            }
+        }
+        /// <summary>
+        /// Определяет над каким операндом работать
+        /// </summary>
+        /// <param name="action">Передает действие</param>
+        private ref string WhichOperandToDo()
+        {
+            if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
+                return ref _leftOperand;
+            else
+                return ref _rigthOperand;
+        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
