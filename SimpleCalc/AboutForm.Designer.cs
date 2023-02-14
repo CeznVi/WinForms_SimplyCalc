@@ -70,7 +70,7 @@
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(88, 23);
             this.button_Ok.TabIndex = 2;
-            this.button_Ok.Text = "OK";
+            this.button_Ok.Text = "ОК";
             this.button_Ok.UseVisualStyleBackColor = true;
             this.button_Ok.Click += new System.EventHandler(this.button_Ok_Click);
             // 
