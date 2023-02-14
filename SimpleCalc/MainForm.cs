@@ -255,13 +255,17 @@ namespace SimpleCalc
                         DoOperationWithOperand("√", ref (WhichOperandToDo()));
                         break;
                     }
+                case "%":
+                    {
+                        _currOperation += "%";
+                        textBoxResult.Text += "%";
+                        break;
+                    }
 
-
-                    
             }
 
         }
-
+        
         /// <summary>
         /// Проверить и добавить в строку цифру
         /// </summary>
@@ -306,11 +310,9 @@ namespace SimpleCalc
             {
                 case "*":
                     {
-                        if (_rigthOperand.Length == 0)
-                        {
-                            textBoxResult.Text = "0";
+                        if (IsRightOperandNull())
                             break;
-                        }
+
                         lOper = double.Parse(_leftOperand);
                         rOper = double.Parse(_rigthOperand);
                         result = lOper * rOper;
@@ -322,11 +324,9 @@ namespace SimpleCalc
                     }
                 case "+":
                     {
-                        if (_rigthOperand.Length == 0)
-                        {
-                            textBoxResult.Text = "0";
+                        if (IsRightOperandNull())
                             break;
-                        }
+
                         lOper = double.Parse(_leftOperand);
                         rOper = double.Parse(_rigthOperand);
                         result = lOper + rOper;
@@ -338,11 +338,9 @@ namespace SimpleCalc
                     }
                 case "/":
                     {
-                        if (_rigthOperand.Length == 0)
-                        {
-                            textBoxResult.Text = "0";
+                        if (IsRightOperandNull())
                             break;
-                        }
+
                         lOper = double.Parse(_leftOperand);
                         rOper = double.Parse(_rigthOperand);
                         result = lOper / rOper;
@@ -354,11 +352,9 @@ namespace SimpleCalc
                     }
                 case "-":
                     {
-                        if (_rigthOperand.Length == 0)
-                        {
-                            textBoxResult.Text = "0";
+                        if (IsRightOperandNull())
                             break;
-                        }
+
                         lOper = double.Parse(_leftOperand);
                         rOper = double.Parse(_rigthOperand);
                         result = lOper - rOper;
@@ -368,7 +364,95 @@ namespace SimpleCalc
                         _currOperation = string.Empty;
                         break;
                     }
+                case "-%":
+                    {
+                        if (IsRightOperandNull())
+                            break;
+
+
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper - ((lOper * rOper)/100);
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "+%":
+                    {
+                        if (IsRightOperandNull())
+                            break;
+
+
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper + ((lOper * rOper) / 100);
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "*%":
+                    {
+                        if (IsRightOperandNull())
+                            break;
+
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper * ((lOper * rOper) / 100);
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "/%":
+                    {
+                        if (IsRightOperandNull())
+                            break;
+
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper / ((lOper * rOper) / 100);
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+
             }
+        }
+
+        /// <summary>
+        /// Проверяет правый операнд
+        /// </summary>
+        /// <returns>Если НУЛ - ПРАВДА, ИНАЧЕ - ЛОЖЬ</returns>
+        private bool IsRightOperandNull()
+        {
+            if (_rigthOperand.Length == 0)
+            {
+                textBoxResult.Text = "0";
+                return true;
+            }
+            else
+                return false; 
+        }
+        /// <summary>
+        /// Проверяет левый операнд на пустоту
+        /// </summary>
+        /// <returns>Если НУЛ - ПРАВДА, ИНАЧЕ - ЛОЖЬ</returns>
+        private bool IsLeftOperandNull()
+        {
+            if (_leftOperand.Length == 0)
+            {
+                textBoxResult.Text = "0";
+                return true;
+            }
+            else
+                return false;
         }
 
 
@@ -380,6 +464,8 @@ namespace SimpleCalc
             {
                 case "x²":
                     {
+                        if(IsLeftOperandNull())
+                            break;
                         num = double.Parse(operand);
                         num *= num;
                         operand = num.ToString();
@@ -388,6 +474,8 @@ namespace SimpleCalc
                     }
                 case "1/x":
                     {
+                        if (IsLeftOperandNull())
+                            break;
                         num = double.Parse(operand);
                         num = 1 / num;
                         operand = num.ToString();
@@ -396,6 +484,8 @@ namespace SimpleCalc
                     }
                 case "√":
                     {
+                        if (IsLeftOperandNull())
+                            break;
                         num = double.Parse(operand);
                         num = Math.Sqrt(num);
                         operand = num.ToString();
@@ -433,5 +523,7 @@ namespace SimpleCalc
         {
 
         }
+
+
     }
 }
