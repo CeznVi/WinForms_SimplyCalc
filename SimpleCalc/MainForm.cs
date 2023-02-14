@@ -93,7 +93,11 @@ namespace SimpleCalc
             else
                 return false;
         }
-
+        /// <summary>
+        /// Действие при нажатии кнопок на панеле калькулятора
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -200,7 +204,7 @@ namespace SimpleCalc
                     }
                 case "-":
                     {
-                        _currOperation = "*";
+                        _currOperation = "-";
                         textBoxResult.Text = "";
                         break;
                     }
@@ -209,11 +213,31 @@ namespace SimpleCalc
                         DoOperationAfterEqual();
                         break;
                     }
-
-
                 case ",":
                     {
-                        CheckAndAddNum(".");
+                        CheckAndAddNum(",");
+                        break;
+                    }
+                case "±":
+                    {
+                        if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
+                        {
+                            if (_leftOperand[0] != '-')
+                                _leftOperand = _leftOperand.Insert(0,"-");
+                            else
+                                _leftOperand = _leftOperand.TrimStart('-');
+
+                            textBoxResult.Text = _leftOperand;
+                        }
+                        else if (_leftOperand != string.Empty && _rigthOperand != string.Empty && _currOperation != string.Empty)
+                        {
+                            if (_rigthOperand[0] != '-')
+                                _rigthOperand = _rigthOperand.Insert(0, "-");
+                            else
+                                _rigthOperand = _rigthOperand.TrimStart('-');
+
+                            textBoxResult.Text = _rigthOperand;
+                        }
                         break;
                     }
 
