@@ -34,6 +34,9 @@ namespace SimpleCalc
             InitButtons();
         }
 
+        /// <summary>
+        /// Инициализация кодом кнопок калькулятора
+        /// </summary>
         private void InitButtons()
         {
             int ind = 0;
@@ -94,7 +97,11 @@ namespace SimpleCalc
         private void Btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            //MessageBox.Show(btn.Text);
+
+
+
+
+
 
             switch (btn.Text)
             {
