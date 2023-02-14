@@ -21,5 +21,15 @@ namespace SimpleCalc
         {
             this.Close();
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/CeznVi/WinForms_SimplyCalc");
+        }
+
+        private void textBox_AboutForm_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

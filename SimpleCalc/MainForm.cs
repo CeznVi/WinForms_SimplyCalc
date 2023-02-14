@@ -8,15 +8,24 @@ namespace SimpleCalc
 {
     public partial class MainForm : Form
     {
+
         private string[] _buttonNames =
         {
-            "⬅", "CE", "C", "±", "√", "7", "8", "9", "/", "%", "4", "5", "6", "*", "1/x", "="
+            "±", "x²", "⬅", "C", 
+            "1/x", "%", "√", "×",
+            "1",   "2", "3", "/",
+            "4",  "5",  "6", "+",
+            "7", "8", "9", "-",
+            "0" ,",", "="
         };
+
+
         private List<Button> _buttonList = new List<Button>();
         private const int _bitDepth = 8;
         private string _currOperation = "";
         private string _leftOperand = "";
         private string _rigthOperand = "";
+
         public MainForm()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -28,29 +37,58 @@ namespace SimpleCalc
         private void InitButtons()
         {
             int ind = 0;
-            int posX = 12;
-            int posY = 50;
-            foreach (var nameButton in _buttonNames)
+            int posX = 4;
+            int posY = 4;
+
+            foreach (string nameButton in _buttonNames)
             {
                 Button tmp = new Button();
+
+                if(nameButton == "," || nameButton == "=" || nameButton == "0")
+                    tmp.Size = new Size(109, 50);
+                else
+                    tmp.Size = new Size(81, 50);
+
+                if(CheckIsStringNum(nameButton))
+                    tmp.BackColor = Color.LemonChiffon;
+                else if(nameButton == "C")
+                    tmp.BackColor = Color.LightCyan;
+                else
+                    tmp.BackColor = Color.PeachPuff;
+
                 tmp.Text = nameButton;
+                
                 tmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 
-                tmp.Size = new Size(60, 40);
+                
                 tmp.Location = new Point(posX, posY);
-                posX = posX + tmp.Size.Width + 6;
+                posX = posX + tmp.Size.Width + 4;
 
                 ind++;
-                if (ind % 5 == 0)
+
+                if (ind % 4 == 0)
                 {
-                    posY += tmp.Size.Height + 6;
-                    posX = 12;
+                    posY += tmp.Size.Height + 4;
+                    posX = 4;
                 }
 
                 panel.Controls.Add(tmp);
                 _buttonList.Add(tmp);
                 tmp.Click += Btn_Click;
             }
+        }
+        /// <summary>
+        /// Проверяет есть ли в строке цифры
+        /// </summary>
+        /// <param name="s">Строка которую требуется проверить</param>
+        /// <returns>Если есть цифры то правде, иначе ложь</returns>
+        private bool CheckIsStringNum(string s)
+        {
+            if(s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || 
+                s == "6" || s == "7" || s == "8" || s == "9" || s == "0")
+                return true;
+            else
+                return false;
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -135,26 +173,17 @@ namespace SimpleCalc
             
         }
 
-        private void button_MC_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_MR_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_MS_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutForm aboutForm = new AboutForm();
             aboutForm.StartPosition = FormStartPosition.CenterParent;
             aboutForm.ShowDialog();
+        }
+
+        private void textBoxResult_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
