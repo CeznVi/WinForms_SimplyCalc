@@ -98,43 +98,107 @@ namespace SimpleCalc
         {
             Button btn = (Button)sender;
 
-
-
-
-
-
             switch (btn.Text)
             {
-                case "0":
+                case ("C"):
                     {
-
+                        _leftOperand = string.Empty;
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        textBoxResult.Text = "0";
                         break;
                     }
-                case ".":
+                case ("0"):
                     {
-
+                        CheckAndAddNum("0");
                         break;
                     }
-                case "7":
+                case ("1"):
                     {
-                        if(_currOperation.Length == 0)      //left
+                        CheckAndAddNum("1");
+                        break;
+                    }
+                case ("2"):
+                    {
+                        CheckAndAddNum("2");
+                        break;
+                    }
+                case ("3"):
+                    {
+                        CheckAndAddNum("3");
+                        break;
+                    }
+                case ("4"):
+                    {
+                        CheckAndAddNum("4");
+                        break;
+                    }
+                case ("5"):
+                    {
+                        CheckAndAddNum("5");
+                        break;
+                    }
+                case ("6"):
+                    {
+                        CheckAndAddNum("6");
+                        break;
+                    }
+                case ("7"):
+                    {
+                        CheckAndAddNum("7");
+                        break;
+                    }
+                case ("8"):
+                    {
+                        CheckAndAddNum("8");
+                        break;
+                    }
+                case ("9"):
+                    {
+                        CheckAndAddNum("9");
+                        break;
+                    }
+                case ("⬅"):
+                    {
+                       if (_leftOperand != string.Empty && _rigthOperand == string.Empty)
+                       {
+                            if(_leftOperand.Length > 1)
+                                _leftOperand = _leftOperand.Remove(_leftOperand.Length - 1);
+                            else
+                                _leftOperand = "0";
+                            
+                            textBoxResult.Text = _leftOperand;
+                       }
+                       else if(_leftOperand != string.Empty && _rigthOperand != string.Empty && _currOperation != string.Empty)
                         {
-                            if(_leftOperand.Length < _bitDepth)
-                            {
-                                _leftOperand += "7";
-                                textBoxResult.Text = _leftOperand;
-                            }
-                        }
-                        else {                              //right
-                            if (_rigthOperand.Length < _bitDepth)
-                            {
-                                _rigthOperand += "7";
-                                textBoxResult.Text = _rigthOperand;
-                            }
+                            if (_rigthOperand.Length > 1)
+                                _rigthOperand = _rigthOperand.Remove(_rigthOperand.Length - 1);
+                            else
+                                _leftOperand = "0";
+
+                            textBoxResult.Text = _rigthOperand;
                         }
                         break;
                     }
-                case "*":
+                case "×":
+                    {
+                        _currOperation = "*";
+                        textBoxResult.Text = "";
+                        break;
+                    }
+                case "/":
+                    {
+                        _currOperation = "/";
+                        textBoxResult.Text = "";
+                        break;
+                    }
+                case "+":
+                    {
+                        _currOperation = "+";
+                        textBoxResult.Text = "";
+                        break;
+                    }
+                case "-":
                     {
                         _currOperation = "*";
                         textBoxResult.Text = "";
@@ -142,44 +206,136 @@ namespace SimpleCalc
                     }
                 case "=":
                     {
-                        double lOper = 0.0;
-                        double rOper = 0.0;
-                        double result = 0.0;
-                        switch (_currOperation)
-                        {
-                            case "*":
-                                {
-                                    lOper = double.Parse(_leftOperand);
-                                    rOper = double.Parse(_rigthOperand);
-                                    result = lOper * rOper;
-                                    textBoxResult.Text = result.ToString();
-                                    break;
-                                }
-                            case "+":
-                                {
-                                    break;
-                                }
-                            case "-":
-                                {
-                                    break;
-                                }
-                            case "√":
-                                {
-
-                                    break;
-                                }
-                        }
+                        DoOperationAfterEqual();
                         break;
                     }
+
+
+                case ",":
+                    {
+                        CheckAndAddNum(".");
+                        break;
+                    }
+
+
             }
 
         }
+
+        /// <summary>
+        /// Проверить и добавить в строку цифру
+        /// </summary>
+        /// <param name="action"></param>
+        private void CheckAndAddNum(string action)
+        {
+            if (_currOperation.Length == 0)      //left
+            {
+                if (_leftOperand.Length < _bitDepth)
+                {
+                    if (_leftOperand == "0")
+                        _leftOperand = action;
+                    else
+                        _leftOperand += action;
+
+                    textBoxResult.Text = _leftOperand;
+                }
+            }
+            else
+            {                              //right
+                if (_rigthOperand.Length < _bitDepth)
+                {
+                    if (_rigthOperand == "0")
+                        _rigthOperand = action;
+                    else
+                        _rigthOperand += action;
+
+                    textBoxResult.Text = _rigthOperand;
+                }
+            }
+        }
+        /// <summary>
+        /// Выполнить выбраную операцию после нажатия "="
+        /// </summary>
+        private void DoOperationAfterEqual() 
+        {
+            double lOper = 0.0;
+            double rOper = 0.0;
+            double result = 0.0;
+
+            switch (_currOperation)
+            {
+                case "*":
+                    {
+                        if (_rigthOperand.Length == 0)
+                        {
+                            textBoxResult.Text = "0";
+                            break;
+                        }
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper * rOper;
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "+":
+                    {
+                        if (_rigthOperand.Length == 0)
+                        {
+                            textBoxResult.Text = "0";
+                            break;
+                        }
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper + rOper;
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "/":
+                    {
+                        if (_rigthOperand.Length == 0)
+                        {
+                            textBoxResult.Text = "0";
+                            break;
+                        }
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper / rOper;
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+                case "-":
+                    {
+                        if (_rigthOperand.Length == 0)
+                        {
+                            textBoxResult.Text = "0";
+                            break;
+                        }
+                        lOper = double.Parse(_leftOperand);
+                        rOper = double.Parse(_rigthOperand);
+                        result = lOper - rOper;
+                        textBoxResult.Text = result.ToString();
+                        _leftOperand = result.ToString();
+                        _rigthOperand = string.Empty;
+                        _currOperation = string.Empty;
+                        break;
+                    }
+            }
+        }
+
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             
         }
-
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
